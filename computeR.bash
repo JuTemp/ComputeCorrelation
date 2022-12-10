@@ -8,9 +8,9 @@ function mean()
   r=0
   for i in ${arr[@]}
   do
-    r=`echo "scale=18;$r+$i" | bc`
+    r=`echo "scale=18;($r)+($i)" | bc`
   done
-  echo "scale=18;$r/${#arr[@]}" | bc
+  echo "scale=18;($r)/(${#arr[@]})" | bc
 }
 
 xarr=($1)
@@ -26,16 +26,18 @@ else
   len=${#xarr[@]}
 fi
 
+dxm=0
+dym=0
 ssr=0
 varx=0
 vary=0
 for i in `seq 0 1 $(($len - 1))`
 do
-  dxm=`echo "scale=18;${xarr[i]}-$xm" | bc`
-  dym=`echo "scale=18;${yarr[i]}-$ym" | bc`
-  ssr=`echo "scale=18;$ssr+$dxm*$dym" | bc`
-  varx=`echo "scale=18;$varx+$dxm*$dxm" | bc`
-  vary=`echo "scale=18;$vary+$dym*$dym" | bc`
+  dxm=`echo "scale=18;(${xarr[i]})-($xm)" | bc`
+  dym=`echo "scale=18;(${yarr[i]})-($ym)" | bc`
+  ssr=`echo "scale=18;($ssr)+($dxm)*($dym)" | bc`
+  varx=`echo "scale=18;($varx)+($dxm)*($dxm)" | bc`
+  vary=`echo "scale=18;($vary)+($dym)*($dym)" | bc`
 done
-sst=`echo "scale=18;sqrt($varx*$vary)" | bc`
-printf "%.18f" `echo "scale=18;1/3"|bc`
+sst=`echo "scale=18;sqrt(($varx)*($vary))" | bc`
+printf "%.18f" `echo "scale=18;($ssr)/($sst)"|bc`
